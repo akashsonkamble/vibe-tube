@@ -2,26 +2,17 @@ import Button from "../components/Button";
 import logo from "../assets/logo.png"
 import { ArrowLeft, Bell, Menu, Mic, Search, Upload, User } from "lucide-react";
 import { useState } from "react";
+import { useSidebarContext } from "../contexts/SidebarContext";
 
 const PageHeader = () => {
     const [showFullWidthSearch, setShowFullWidthSearch] = useState(false);
     
     return (
         <div className="flex gap-10 justify-between pt-2 mb-6 mx-4 lg:gap-20">
-            <div className={`gap-4 items-center flex-shrink-0 ${showFullWidthSearch ? "hidden" : "flex"}`}>
-                <Button variant="ghost" size="icon">
-                    <Menu />
-                </Button>
-                <a href="/">
-                    <img
-                        src={logo} 
-                        alt="logo" 
-                        className="h-6" 
-                    />
-                </a>
-            </div>
+            <PageHeaderFirstSection hidden={showFullWidthSearch} />
             <form className={`gap-4 flex-grow justify-center ${showFullWidthSearch ? "flex" : "hidden md:flex"}`}>
-                {showFullWidthSearch && (<Button
+                {showFullWidthSearch && (
+                <Button
                     onClick={() => setShowFullWidthSearch(false)}
                     type="button"
                     variant="ghost"
@@ -72,3 +63,26 @@ const PageHeader = () => {
 }
 
 export default PageHeader;
+
+type PageHeaderFirstSectionProps = {
+    hidden?: boolean
+}
+
+export const PageHeaderFirstSection = ({ hidden = false }: PageHeaderFirstSectionProps) => {
+    const { toggle } = useSidebarContext();
+
+    return (
+        <div className={`gap-4 items-center flex-shrink-0 ${hidden ? "hidden" : "flex"}`}>
+                <Button onClick={toggle} variant="ghost" size="icon">
+                    <Menu />
+                </Button>
+                <a href="/">
+                    <img
+                        src={logo} 
+                        alt="logo" 
+                        className="h-6" 
+                    />
+                </a>
+            </div>
+    )
+}
